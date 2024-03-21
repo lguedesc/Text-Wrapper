@@ -5,7 +5,7 @@
 # To use intel compiler (icx) in linux, insert at terminal before call
 # source /opt/intel/oneapi/setvars.sh
 
-CC=clang
+CC=gcc
 CSTD=c17
 NAME=wrapper
 CFLAGS=-std=$(CSTD) -Wall -Werror -Wpedantic 

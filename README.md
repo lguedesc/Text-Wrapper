@@ -7,4 +7,8 @@ This repository contains a simple text wrapper written in C. The script is desig
 Please note that this script is a work in progress and, as such, may contain bugs. If you encounter a bug, please report it in the 'Issues' section of this GitHub repository. Your contributions to identifying and resolving issues are greatly appreciated!
 
 ## Testing
-This script was tested using clang compiler on MacOS Ventura.
+
+This script was tested using:
+
+* clang compiler on MacOS Ventura;
+* gcc compiler on Ubuntu 23.10.

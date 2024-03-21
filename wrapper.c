@@ -169,10 +169,8 @@ char *wrap_text(char *str, int max_line_length) {
 int main(void) {
     // Test strings
     char *str_1 = "\x1b[33m=>\x1b[32m This is a very very loong message that needs to be inserted into this program to test the split function. Lets make this string really big to test it properly.\x1b[0m\n";
-    char *str_2 = "\x1b[33m=>\x1b[32m File \x1b[35m'luaguedesc/data/in/DRDs/very_long_input_file.txt' (25 bytes)\x1b[32m successfully loaded! I haveeDA also another input file to be loaded \x1b[35m'luaguedesc/data/DRDs/input_files/very_long_input_file_2.txt' (27 bytes)\x1b[32m that was successfully loaded! AndAFinalVeryVeryBigWordWithManyCharactersAndNoSpaces.\x1b[0m\n";
+    char *str_2 = "\x1b[33m=>\x1b[32m File \x1b[35m'luaguedesc/data/in/DRDs/very_long_input_file.txt' (25 bytes)\x1b[32m successfully loaded! I have also another input file to be loaded \x1b[35m'luaguedesc/data/DRDs/input_files/very_long_input_file_2.txt' (27 bytes)\x1b[32m that was successfully loaded! AndAFinalVeryVeryBigWordWithManyCharactersAndNoSpaces.\x1b[0m\n";
     char *str_3 = "\x1b[33m=>\x1b[32m dhaisdhiasudhuasihdiusahdiusahdhasiudsiuhdsauihdsuihdsaiuhdsaihudsaiuhdsauihsaduhiasdhuadsiuhdasihudiuasduhisaiuhdasuihdasuihuidasiuhuhiadsiuhasduihdaiudas.\x1b[0m\n";
-    char *str_4 = "\x1b[33m=>\x1b[32m Vamos testar uma string muito grande, com palavras genericas e algumas muito grandes tipo essa PALAVRAMUITOGIGANTEPALAVRAMUITOGIGANTEPALAVRAMUITOGIGANTE para testar melhor essa função de wrap text com PALAVRAGRANDEPALAVRAGRANDEPALAVRAGRANDEPALAVRAGRANDEPALAVRAGRANDE e esse é o fim.\x1b[0m\n";   
-
     // Call wrapper
     line_length_visualization(MAX_PRINT_LEN);
     char *new_str_1 = wrap_text(str_1, MAX_PRINT_LEN);
@@ -185,14 +183,9 @@ int main(void) {
     line_length_visualization(MAX_PRINT_LEN);
     char *new_str_3 = wrap_text(str_3, MAX_PRINT_LEN);
     printf("%s", new_str_3);
-
-    line_length_visualization(MAX_PRINT_LEN);
-    char *new_str_4 = wrap_text(str_4, MAX_PRINT_LEN);
-    printf("%s", new_str_4);
     
     // Free memory
     free(new_str_1);
     free(new_str_2);
     free(new_str_3);
-    free(new_str_4);
 }
