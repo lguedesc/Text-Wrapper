@@ -1,4 +1,4 @@
-# Text Wrapper in C
+# Text Wrapper in C 📝
 
 This repository contains a simple text wrapper written in C. The script is designed to handle ANSI formatted text and can manage words that exceed the length of a line. It's a tool for formatting console output or preparing text for fixed-width displays.
 
