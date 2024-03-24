@@ -7,12 +7,13 @@
 
 CC=gcc
 CSTD=c17
-NAME=wrapper
+NAME=test
 CFLAGS=-std=$(CSTD) -Wall -Werror -Wpedantic 
+CFILES= $(NAME).c wrapper.c
 
 # The main call of make
 all: 
-	@$(CC) $(CFLAGs) -o $(NAME) $(NAME).c
+	@$(CC) $(CFLAGs) -o $(NAME) $(CFILES)
 
 run: 
 	@./$(NAME)

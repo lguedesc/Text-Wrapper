@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
 #include <stdbool.h>
 
 #define MAX_PRINT_LEN 20
 
-void ptr_safety_check(void *ptr, char *ptr_name) {
+static void ptr_safety_check(void *ptr, char *ptr_name) {
     if (ptr == NULL) {
         if (ptr_name != NULL) {
             printf("'%s' is a NULL pointer, please check the code\n", ptr_name);
@@ -19,24 +18,17 @@ void ptr_safety_check(void *ptr, char *ptr_name) {
     }
 }
 
-void line_length_visualization(size_t maxlength) {
-    for (size_t i = 0; i < maxlength; i++) {
-        printf("=");
-    }
-    printf("\n");
-}
-
-bool check_ANSI_start(char character, bool current_ANSI_status) {
+static bool check_ANSI_start(char character, bool current_ANSI_status) {
     /* This function checks if the position of the string is the start of an ANSI escape character */
     bool inside_ANSI = current_ANSI_status;
     // Check if the character is the first character of an ANSI escape sequence  
-    if (character == '\x1b') {
+    if (character == '\x1b' || character == '\033') {
         inside_ANSI = true;
     }
     return inside_ANSI;
 }
 
-bool check_ANSI_end(char character, bool current_ANSI_status) {
+static bool check_ANSI_end(char character, bool current_ANSI_status) {
     /* This function checks if the position of the string is the end of an ANSI escape character 
        (this function must be called after all checks for inside_ANSI variable) */
     bool inside_ANSI = current_ANSI_status;
@@ -47,7 +39,7 @@ bool check_ANSI_end(char character, bool current_ANSI_status) {
     return inside_ANSI;
 }
 
-bool is_a_big_word(char *str, int max_line_length, int last_space_position) {
+static bool is_a_big_word(char *str, int max_line_length, int last_space_position) {
     unsigned int word_length = 0;           // Size of the analyzed word
     bool inside_ANSI = false;               // Flag to determine if it is within an ANSI character
     // Iterate over the string from the initial position (where it has the last space) until it finds another space or "\0"
@@ -76,7 +68,7 @@ bool is_a_big_word(char *str, int max_line_length, int last_space_position) {
     }
 }
 
-void get_last_space_pos_and_length(char *str, size_t i, bool *inside_ANSI, int *last_space_position, int *length_counter) {
+static void get_last_space_pos_and_length(char *str, size_t i, bool *inside_ANSI, int *last_space_position, int *length_counter) {
     /* This function updates the last space position of the string and the length counter to control the line breaks */
     // Check if position is a ANSI escape character
     (*inside_ANSI) = check_ANSI_start(str[i], (*inside_ANSI));
@@ -94,7 +86,7 @@ void get_last_space_pos_and_length(char *str, size_t i, bool *inside_ANSI, int *
     (*inside_ANSI) = check_ANSI_end(str[i], (*inside_ANSI));   
 }
 
-void put_newline_in_big_word(char *new_str, size_t *current_pos, size_t *advances, int *last_space_pos, int *length_counter) {
+static void put_newline_in_big_word(char *new_str, size_t *current_pos, size_t *advances, int *last_space_pos, int *length_counter) {
     // Put a newline character at the end of the line
     new_str[(*current_pos)] = '\n';
     (*advances)++;
@@ -105,7 +97,7 @@ void put_newline_in_big_word(char *new_str, size_t *current_pos, size_t *advance
     (*length_counter) = 1;
 }
 
-void put_newline_in_last_space(char *new_str, size_t original_str_pos, int last_space_pos, size_t advances, int *length_counter) {
+static void put_newline_in_last_space(char *new_str, size_t original_str_pos, int last_space_pos, size_t advances, int *length_counter) {
     // Put a newline character in the last space character added by the number of additional newlines for big words
     new_str[last_space_pos + advances] = '\n';
     (*length_counter) = original_str_pos - last_space_pos;
@@ -164,28 +156,4 @@ char *wrap_text(char *str, int max_line_length) {
         j++;
     }
     return new_str;
-}
-
-int main(void) {
-    // Test strings
-    char *str_1 = "\x1b[33m=>\x1b[32m This is a very very loong message that needs to be inserted into this program to test the split function. Lets make this string really big to test it properly.\x1b[0m\n";
-    char *str_2 = "\x1b[33m=>\x1b[32m File \x1b[35m'luaguedesc/data/in/DRDs/very_long_input_file.txt' (25 bytes)\x1b[32m successfully loaded! I have also another input file to be loaded \x1b[35m'luaguedesc/data/DRDs/input_files/very_long_input_file_2.txt' (27 bytes)\x1b[32m that was successfully loaded! AndAFinalVeryVeryBigWordWithManyCharactersAndNoSpaces.\x1b[0m\n";
-    char *str_3 = "\x1b[33m=>\x1b[32m dhaisdhiasudhuasihdiusahdiusahdhasiudsiuhdsauihdsuihdsaiuhdsaihudsaiuhdsauihsaduhiasdhuadsiuhdasihudiuasduhisaiuhdasuihdasuihuidasiuhuhiadsiuhasduihdaiudas.\x1b[0m\n";
-    // Call wrapper
-    line_length_visualization(MAX_PRINT_LEN);
-    char *new_str_1 = wrap_text(str_1, MAX_PRINT_LEN);
-    printf("%s", new_str_1);
-    
-    line_length_visualization(MAX_PRINT_LEN);
-    char *new_str_2 = wrap_text(str_2, MAX_PRINT_LEN);
-    printf("%s", new_str_2);
-    
-    line_length_visualization(MAX_PRINT_LEN);
-    char *new_str_3 = wrap_text(str_3, MAX_PRINT_LEN);
-    printf("%s", new_str_3);
-    
-    // Free memory
-    free(new_str_1);
-    free(new_str_2);
-    free(new_str_3);
 }
