@@ -20,3 +20,4 @@ run:
 
 clean: 
 	@rm -f $(NAME)
+	@rm -f *.txt

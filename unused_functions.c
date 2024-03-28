@@ -1,5 +1,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdarg.h>
+#include <stdio.h>
 
 #define RESET_STYLE        "\x1b[0m"
 #define COLOR_BLACK        "\x1b[30m"
@@ -79,4 +81,26 @@ char *wrap_text_with_small_words(char *str, int max_line_length) {
     }
 
     return new_str;
+}
+
+void wrap_fprintf(FILE *file, const char *format, int max_line_length, ...) {
+    // Declare list of variable arguments and start variable argument list
+    va_list args;
+    va_start(args, max_line_length); 
+    //Determine the size needed for the output string
+    int size = vsnprintf(NULL, 0, format, args) + 1;
+    // Allocate memory to pass the formatted string
+    char *buffer = malloc(size);
+    ptr_safety_check(buffer, "char *buffer at wrap_printf(...) function");
+    // Format the string
+    vsnprintf(buffer, size, format, args);
+    // End the variable argument list
+    va_end(args);
+    // Wrap the text
+    char *wrapped_text = wrap_text(buffer, max_line_length);
+    // Output the wrapped text
+    fprintf(file, "%s", wrapped_text);
+    // Free allocated memory
+    free(buffer);
+    free(wrapped_text);
 }
